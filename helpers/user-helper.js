@@ -167,8 +167,6 @@ module.exports = {
                             .catch((err) => {
                                 reject(err)
                             })
-
-
                     }
                 })
             }
@@ -199,7 +197,7 @@ module.exports = {
                         
 
                         resolve({products:response,totalPages})
-                        // Perform further operations with the retrieved products
+                        
                       })
                       .catch((err) => {
                         console.error(err);
