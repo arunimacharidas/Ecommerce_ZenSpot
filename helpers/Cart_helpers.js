@@ -44,7 +44,6 @@ module.exports = {
     getaddcart: (id) => {
         return new Promise((resolve, reject) => {
             const userCart = cartModel.findOne({ userId: id })
-            console.log(userCart.userId,'{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{{');
             if (!userCart) {
 
                 reject()
@@ -73,6 +72,7 @@ module.exports = {
                         totalAmount += subtotal
 
                     })
+                    
                     let result = {
                         userId: id,
                         cartItems: cartItems,

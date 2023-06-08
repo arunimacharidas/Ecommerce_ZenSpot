@@ -13,7 +13,7 @@ module.exports={
 
             })
             newcoupon.save().then((coupen)=>{
-                console.log(coupen,'PPPPPPPPPPPPPPPPPPPPPPPP')
+        
                 resolve()
             })
             console.log('new coupon added,""""""""""""""""')
