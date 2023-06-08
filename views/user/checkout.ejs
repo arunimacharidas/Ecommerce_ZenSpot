@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Evara</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/custom/custom.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+
+    <main class="main">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 ">
+                </div>
+                <div class="col-md-6">
+                    <div class="toggle_info">
+                        <span><i class="fi-rs-label mr-10"></i><span class="text-muted">Have a coupon?</span> <a
+                                href="#coupon" data-bs-toggle="collapse" class="collapsed"
+                                aria-expanded="false">Click here to enter your code</a> <a
+                                onclick="location.reload()"
+                                class="btn-danger btn-sm btn-danger justify-content-between d-none"
+                                id="remove">remove Coupen</a> </span>
+                    </div>
+                    <div class="panel-collapse collapse coupon_form " id="coupon">
+
+                        <div class="panel-body row justify-content-around">
+                            <span id="minErr" class="text-danger "></span>
+                            <% (coupens||[]).forEach(coupon=>{%>
+                                <div class="card col-md-5 mt-5 ">
+                                    <div class="card-body">
+                                        <h3 class="card-title text-center">
+                                            <%= coupon.name %>
+                                        </h3>
+                                        <p class="card-text">All Above:<%=coupon.minAmount %>
+                                        </p>
+                                        <p class="card-text"> Discound:<%=coupon.maxAmount %>
+                                        </p>
+                                        <p class="card-text"> Validity:<%=coupon.validity.toLocaleDateString()%>
+                                        </p>
+                                        <p><strong>Code:</strong>
+                                            <%= coupon.code %>
+                                        </p>
+                                    </div>
+                                    <button class="btn  btn-sm mb-10 " id="<%= coupon._id%>"
+                                        onclick="return coupon('<%=coupon._id %>','<%= prod.totalAmount %>','<%=coupon.minAmount %>','<%=coupon.maxAmount %>','<%=coupon.validity%>','<%=coupon.perc %>' )">Apply</button>
+                                </div>
+
+                                <%})%>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="mt-50 mb-50">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 ">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="divider mt-50 mb-50"></div>
+                        </div>
+                    </div>
+                    <form id="checkout-form">
+                        <div class="row">
+                            
+                            <div class="col-md-6 mb-sm-15">
+                                <div class="mb-25">
+                                    <h4>Billing Details</h4>
+                                </div>
+                               
+
+                                <div class="form-group">
+                                    <input type="text" required="" name="name" placeholder="Name *">
+                                </div>
+
+
+                                <div class="form-group">
+                                    <input type="text"  name="billing_address" required="" placeholder="Address *">
+                                </div>
+
+                                <div class="form-group">
+                                    <input required="" type="text" name="city" placeholder="City / Town *">
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="text"  name="state" placeholder="State / County *">
+                                </div>
+                                <div class="form-group">
+                                    <input required="" type="text"   name="zipcode" placeholder="Postcode / ZIP *">
+                                </div>
+
+                                <div class="form-group">
+                                    
+                                    <input type="text" name="userId" id="" value="<%= locals.user._id%>" hidden>
+                                </div>
+                            
+
+                            </div>
+                            <div class="col-md-6">
+                                <div class="order_review">
+                                    <div class="mb-20">
+                                        <h4>Your Orders</h4>
+                                    </div>
+                                    <% if(locals.prod){%>
+
+                                        <div class="table-responsive order_table text-center">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan="2">Product</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% prod.cartItems.forEach((items)=>{%>
+                                                        <tr>
+                                                            <td class="image product-thumbnail"><img
+                                                                    style="height: 80px;"
+                                                                    src="/images/products_image/<%= items.productId.productimage[0] %>"
+                                                                    alt="#"></td>
+                                                            <td>
+                                                                <h5><a href="shop-product-full.html">
+                                                                        <%=items.productId.productTitle %>
+                                                                    </a></h5> <span class="product-qty">x
+                                                                    <%=items.quantity %>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <%=items.subTotal %>
+                                                            </td>
+                                                        </tr>
+                                                        <%})%>
+
+                                                            <tr>
+                                                                <th>SubTotal</th>
+                                                                <td class="product-subtotal" colspan="2">
+                                                                    <span id="subtotal">
+                                                                        <%= prod.totalAmount %>
+                                                                    </span>
+
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <th>Shipping</th>
+                                                                <td colspan="2"><span id="dis"></span></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <th>Total</th>
+                                                                <td colspan="2" class="product-subtotal"><span
+                                                                        class="font-xl text-brand fw-900" id="total">
+                                                                        <%= prod.totalAmount %>
+                                                                    </span></td>
+                                                                <input type="text" id="ptotal" name="totalamount"
+                                                                    value="<%= prod.totalAmount %>" hidden>
+                                                            </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <%}%>
+                                            <div class="bt-1 border-color-1 mt-30 mb-30"></div>
+                                            <div class="payment_method">
+                                                <div class="mb-25">
+                                                    <h5>Payment</h5>
+                                                </div>
+                                                <div class="payment_option">
+                                                    <div class="custome-radio">
+                                                        <input class="form-check-input" required="" type="radio"
+                                                            name="payment_option" id="exampleRadios3" value="cod"
+                                                            checked="">
+                                                        <label class="form-check-label" for="exampleRadios3"
+                                                            data-bs-toggle="collapse" data-target="#bankTranfer"
+                                                            aria-controls="bankTranfer">COD</label>
+                                                        <div class="form-group collapse in" id="bankTranfer">
+                                                            <p class="text-muted mt-5">There are many variations of
+                                                                passages of Lorem Ipsum available, but the majority
+                                                                have
+                                                                suffered alteration. </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="custome-radio">
+                                                        <input class="form-check-input" required="" type="radio"
+                                                            name="payment_option" id="exampleRadios5" value="online"
+                                                            checked="">
+                                                        <label class="form-check-label" for="exampleRadios5"
+                                                            data-bs-toggle="collapse" data-target="#paypal"
+                                                            aria-controls="paypal">Pay ONline</label>
+                                                        <div class="form-group collapse in" id="paypal">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-fill-out btn-block mt-30">Place
+                                                Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="col-md-5">
+                        <div class="toggle_info">
+                            <span><i class="fi-rs-user mr-10"></i><span class="text-muted">Address</span> <a href="#loginform" data-bs-toggle="collapse" class="collapsed" aria-expanded="false">Select Address</a></span>
+                        </div>
+                      <div class="panel-collapse collapse login_form" id="loginform">
+                        <div class="panel-body row justify-content-around">
+                          
+                          <% address.forEach(adress=>{%>
+                          <div class="card col-md-5 mt-5">
+                            <div class="card-body">
+                              <h3 class="card-title text-center">
+                                <%= adress.name %>
+                              </h3>
+                              <p class="card-text"><%=adress.billing_address %></p>
+                              <p class="card-text">Zipcode: <%=adress.zipcode %></p>
+                              <p class="card-text">State: <%=adress.state%></p>
+                              <p><strong>City</strong> <%= adress.city %></p>
+                            </div>
+                            <button class="btn btn-sm" onclick="fillAddressForm('<%= adress.name %>', '<%= adress.billing_address %>', '<%= adress.city %>', '<%= adress.state %>', '<%= adress.zipcode %>')">Apply</button>
+                          </div>
+                          <%})%>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    <!-- Preloader Start -->
+    <!-- <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</body>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    function coupon(cid, total, min, dis, val) {
+        if (cid == 0) {
+            return
+        }
+
+        val = new Date(val)
+        let cur = new Date()
+        total = parseInt(total)
+        min = parseInt(min)
+        dis = parseInt(dis)
+        if (cur < val && total > min ) {
+            let err = ''
+            document.getElementById(cid).classList.add('d-none')
+
+            document.getElementById('minErr').innerHTML = err
+            document.getElementById('dis').innerHTML = -dis
+            document.getElementById('total').innerHTML = total - dis
+            document.getElementById('remove').classList.remove('d-none')
+            $('#ptotal').prop('value', (total - dis))
+            return
+
+        } else if (cur > val) {
+            let err = 'Coupen is expired'
+            document.getElementById(cid).classList.remove('d-none')
+            document.getElementById('remove').classList.add('d-none')
+            document.getElementById('minErr').innerHTML = err
+            document.getElementById('dis').innerHTML = 0
+            return
+
+        } else if (total < min) {
+            console.log('hereee');
+            let err = 'Min amound is ' + min
+            document.getElementById(cid).classList.remove('d-none')
+            document.getElementById('remove').classList.add('d-none')
+            document.getElementById('total').innerHTML = total
+            document.getElementById('minErr').innerHTML = err
+            document.getElementById('dis').innerHTML = 0
+            return
+        }
+        document.getElementById(cid).classList.remove('d-none')
+        document.getElementById('remove').classList.add('d-none')
+        document.getElementById('dis').innerHTML = 0
+        document.getElementById('total').innerHTML = total
+        return
+
+
+
+
+
+    }
+</script>
+<script>
+    $("#checkout-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+            url: '/checkout',
+            method: 'post',
+            data: $('#checkout-form').serialize(),
+            success: (response) => {
+                retry = response
+                console.log(response,"auni,,,,aaar")
+                if (response.cod) {
+                    location.href = '/orderplaced'
+
+                }
+                 else {
+                    razorPayPayment(response)
+                }
+            }
+        })
+    })
+
+    function razorPayPayment(order) {
+        console.log(order,'sddddddddffff')
+        const amount = parseInt(order.totalamount)
+        console.log(amount,"jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj");
+        var options = {
+            "key": "rzp_test_gSKuhb79bBJ2df", // Enter the Key ID generated from the Dashboard
+            "amount": `${amount}`, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "currency": "INR",
+            "name": "420 X FourTwenty",
+            "description": "Test Transaction",
+            "image": "https://example.com/your_logo",
+            "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+            "handler": function (response) {
+                // alert(response.razorpay_payment_id);
+                // alert(response.razorpay_order_id);
+                // alert(response.razorpay_signature)
+
+                verifyPayment(response, order)
+            },
+            "prefill": {
+                "name": "Gaurav Kumar",
+                "email": "gaurav.kumar@example.com",
+                "contact": "9000090000"
+            },
+            "notes": {
+
+                "address": "Razorpay Corporate Office"
+            },
+            "theme": {
+                "color": "#3399cc"
+            },
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.on('payment.failed', async function (response) {
+            // await rzp1.close()
+            console.log('payment faild', response)
+            console.log(retry)
+            await paymentFailed(order)
+
+        });
+        rzp1.open();
+
+    }
+
+
+    function verifyPayment(payment, order) {
+        console.log('Hiii');
+        $.ajax({
+            url: '/verify-payment',
+            data: {
+                payment,
+                order
+            },
+            method: 'post',
+            success: (response) => {
+                if (response.status) {
+                    Swal.fire({
+                        title: 'Sucess!',
+                        text: 'Payment Successful',
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes',
+                    }).then((result) => {
+                        console.log('verified');
+                        if (result.isConfirmed) {
+                    window.location.href = '/orderplaced';
+                    }
+                    });
+                }
+
+            }
+        })
+    }
+</script>
+<script>
+    function fillAddressForm(name, billingAddress, city, state, zipcode) {
+        const nameInput = document.querySelector('input[name="name"]');
+        const addressInput = document.querySelector('input[name="billing_address"]');
+        const cityInput = document.querySelector('input[name="city"]');
+        const stateInput = document.querySelector('input[name="state"]');
+        const zipcodeInput = document.querySelector('input[name="zipcode"]');
+      
+        nameInput.value = name;
+        addressInput.value = billingAddress;
+        cityInput.value = city;
+        stateInput.value = state;
+        zipcodeInput.value = zipcode;
+      }
+      
+    </script>
+
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/shop-checkout.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT -->
+
+</html>

@@ -1,0 +1,194 @@
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets1/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/assets1/css/main.css" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+</head>
+<% if(orderdetails){%>
+    <section class="content-main">
+        <div class="card">
+
+            <header class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                        <span>
+                            <i class="material-icons md-calendar_today"></i> <b>Wed, Aug 13, 2020, 4:34PM</b>
+                        </span> <br>
+                        <small class="text-muted">Order ID: 3453012</small>
+
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 ms-auto text-md-end">
+                        <select class="form-select d-inline-block mb-lg-0 mb-15 mw-200">
+                            <option>Change status</option>
+                            <option>Awaiting payment</option>
+                            <option>Confirmed</option>
+                            <option>Shipped</option>
+                            <option>Delivered</option>
+                        </select>
+                    </div>
+                </div>
+            </header>
+            <div class="card-body">
+                <div class="row mb-50 mt-20 order-info-wrap">
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-person"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Customer</h6>
+                                <p class="mb-1">
+                                    <%= orderdetails.name %><br> <br>
+                                        <%= orderdetails.phone %>
+                                </p>
+                                <a href="#">View profile</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-local_shipping"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Order info</h6>
+                                <p class="mb-1">
+                                    Shipping: Fargo express <br> Pay method: <%= orderdetails.paymentOption %><br>
+                                        Status: <%= orderdetails.status %>
+                                </p>
+
+
+
+                            </div>
+                        </article>
+                    </div>
+                    <div class="col-md-4">
+                        <article class="icontext align-items-start">
+                            <span class="icon icon-sm rounded-circle bg-primary-light">
+                                <i class="text-primary material-icons md-place"></i>
+                            </span>
+                            <div class="text">
+                                <h6 class="mb-1">Deliver to</h6>
+                                <p class="mb-1">
+                                    City: <%= orderdetails.city %><br>
+                                        <%= orderdetails.billingAddress %><br>
+                                            <%= orderdetails.zipcode %>
+                                </p>
+                                <a href="#">View profile</a>
+                            </div>
+                        </article>
+                    </div> <!-- col// -->
+                </div> <!-- row // -->
+                <div class="row">
+                    <div class="col-lg-7">
+                        <div class="table-responsive">
+                            <table class="table" id="salesTable" >
+                                <thead>
+                                    <tr>
+                                        <th width="40%">Product</th>
+                                        <th width="20%">Unit Price</th>
+                                        <th width="20%">Quantity</th>
+                                        <th width="20%">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% orderdetails.products.forEach(product=>{ %>
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="#">
+                                                    <div class="left">
+                                                        <img src="/images/products_image/<%= product.productimage %>"
+                                                            width="40" height="40" class="img-xs" alt="Item">
+                                                    </div>
+
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <%= product.price %>
+                                            </td>
+                                            <td>
+                                                <%= product.quantity %>
+                                            </td>
+                                            <td>
+                                                <%= product.price * product.quantity %>
+                                            </td>
+                                        </tr>
+                                        <%})%>
+                                </tbody>
+                            </table>
+                        </div> <!-- table-responsive// -->
+                    </div> <!-- col// -->
+                    <div class="col-lg-1"></div>
+                    <div class="col-lg-4">
+                        <div class="box shadow-sm bg-light">
+                            <!-- <h6 class="mb-15">Payment info</h6>
+                            <p>
+                                <img src="/assets1/imgs/card-brands/2.png" class="border" height="20"> Master Card ****
+                                **** 4768 <br>
+                                Business name: Grand Market LLC <br>
+                                Phone: +1 (800) 555-154-52
+                            </p> -->
+                            <a href="/invoice/<%= orderdetails.id %>"><button id="" class="btn btn-primary">
+                                <i class="fi-rs-shopping-bag mr-5"></i>Download Invoice
+                              </button></a>
+                            <!-- <a href="/singleorder/<%= orderdetails.id %>.pdf" download class="btn btn-primary">Download Invoice</a> -->
+                        </div>
+
+                    </div>
+                </div>
+    </section>
+    <%}%>
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script data-cfasync="false"
+                        src="../../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+                    <script>
+                        document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+
+
+                </div>
+            </div>
+        </footer>
+        </main>
+
+
+        <script type="text/javascript" charset="utf8"
+            src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="/assets1/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="/assets1/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="/assets1/js/vendors/select2.min.js"></script>
+        <script src="/assets1/js/vendors/perfect-scrollbar.js"></script>
+        <script src="/assets1/js/vendors/jquery.fullscreen.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+        
+       
+
+        <script src="/assets1/js/main.js" type="text/javascript"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+
+        </body>
+
+
+        </html>

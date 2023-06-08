@@ -1,0 +1,295 @@
+<style>
+    #imageDiv img {
+        max-height: 10vh;
+        margin-left: .5vw;
+    }
+</style>
+
+<section class="content-main">
+    <form action="/admin/addproducts" method="post" id="form"name="myform"   onsubmit="return validateImage()" enctype="multipart/form-data" >
+        <div class="row">
+            <div class="col-9">
+                <div class="content-header">
+                    <h2 class="content-title">Add New Product</h2>
+                    <div>
+                      <!-- <button class="btn btn-md rounded font-sm hover-up" name="cropper" id="crop-btn"
+                      type="button">Crop</button> -->
+
+                        <button class="btn btn-md rounded font-sm hover-up">add product</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Basic</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Product Name</label>
+                            <input type="text" required name="name" id="name" placeholder="name" onkeyup="return validateName()">
+                            <span id="name-error" style="color: red; font-size: medium; margin-top: 5px;"></span>
+                        </div>
+                        <div id="mainerror" style="color: red;">
+
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">description</label>
+                            <textarea placeholder="Type here" name="description" id="description" class="form-control"onkeyup="return validateDescription()"
+                                rows="4"></textarea>
+                                <span id="description-error" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <div class="mb-4">
+                                    <label class="form-label"> price</label>
+                                    <div class="row gx-2">
+                                        <input placeholder="₹" type="text" name="price" id="price" class="form-control" onkeyup="return validatePrice()">
+                                        <span id="price-error" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Quantity</label>
+                            <input type="text" placeholder="%" name="quantity" class="form-control" id="quantity" onkeyup="return validateQuantity()">
+                            <span id="quantity-error" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div> <!-- card end// -->
+
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Media</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="input-upload">
+                            <img src="/adminassets/imgs/theme/upload.svg">
+                            <input  id="formFileMultiple" class="form-control" name="image" type="file" multiple>
+                        </div>
+                        <!-- <img id ="croppedImage"src="#" alt =""/> -->
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h4>Selected Images</h4>
+                    </div>
+                    <div class="card-body">
+            <div id="imageDiv" class="mb-2"></div>
+        </div>
+    </div>
+</div>
+                </div> <!-- card end// -->
+                <div class="card mb-4">
+
+                    <div class="card-body">
+                        <div class="row gx-2">
+                            <div class="col-sm-6 mb-3">
+                                <label class="form-label">Category</label>
+
+                                <select id="" class="form-select" name="category">
+                                    <% categories.forEach((category)=>{%>
+                                        <% if(category.status){%>  
+                                    <option value="<%= category.name %>"><%= category.name %>  </option> 
+                                    <%}%>
+                                    <%})%>
+                                </select>
+                            </div> 
+                        </div> 
+                    </div>
+                </div> <!-- card end// -->
+            </div>
+
+        </div>
+    </form>
+  
+    <script>
+        const img = document.forms['myform']['image'];
+        const validExt = ['jpeg', 'png', 'jpg', 'webp'];
+        function validateImage() {
+          if (img.value !== '') {
+            const dot_pos = img.value.lastIndexOf('.') + 1;
+            const img_ext = img.value.substring(dot_pos);
+            const result = validExt.includes(img_ext);
+            if (result == false) {
+              swal.fire('OOPs!', 'Selected file is not an image!', 'error');
+              return false;
+            } else {
+              if (Number(img.files[0].size / (1024 * 1024)) >= 3) {
+                swal.fire(
+                  'OOPs!',
+                  'Size must be smaller than 3 MB . Current size is :' +
+                    Number(img.files[0].size / (1024 * 1024)),
+                  'error'
+                );
+                // alert('Size must be smaller than 3 MB . Current size is :' + Number(img.files[0].size/(1024*1024)))
+              }
+            }
+          } else {
+            swal.fire('error', 'No image is selected...', 'error');
+            // alert('No image is selected...');
+            return false;
+          }
+          return true;
+        }
+      
+        const nameError = document.getElementById('name-error');
+        const descriptionError = document.getElementById('description-error');
+        const priceError = document.getElementById('price-error');
+        const quantityError = document.getElementById('quantity-error');
+        const formError = document.getElementById('form-error');
+        const form = document.getElementById('form');
+      
+        function validateName() {
+          const name = document.getElementById('name').value;
+          const nameInput = document.getElementById('name');
+      
+          if (name.length == 0) {
+            nameError.innerHTML = 'Name is required';
+            nameError.style.color = 'red';
+            nameInput.style.border = 'solid 2px red';
+            return false;
+          }
+          if (!name.match(/^[A-Z a-z]{3,}$/)) {
+            nameError.innerHTML = 'Write valid name';
+            nameError.style.color = 'red';
+            nameInput.style.border = 'solid 2px red';
+      
+            return false;
+          }
+          nameError.innerHTML = '';
+          // nameError.innerHTML = "Valid Name";
+          nameError.style.color = 'green';
+          nameInput.style.border = 'solid 2px green';
+      
+          return true;
+        }
+        function validateDescription() {
+          const description = document.getElementById('description').value;
+          const descriptionInput = document.getElementById('description');
+          console.log(name);
+          if (description.length == 0) {
+            descriptionError.innerHTML = 'Discription is required';
+            descriptionError.style.color = 'red';
+            descriptionInput.style.border = 'solid 2px red';
+            return false;
+          }
+          if (!description.match(/^[A-Z a-z]{3,}$/)) {
+            descriptionError.innerHTML = 'Write valid discription';
+            descriptionError.style.color = 'red';
+            nameInput.style.border = 'solid 2px red';
+            return false;
+          }
+          descriptionError.innerHTML = '';
+          // nameError.innerHTML = "Valid Name";
+          descriptionError.style.color = 'green';
+          descriptionInput.style.border = 'solid 2px green';
+          return true;
+        }
+        function validatePrice() {
+          const price = document.getElementById('price').value;
+          const priceInput = document.getElementById('price');
+          if (price.length == 0) {
+            priceError.innerHTML = 'Price field is required';
+            priceError.style.color = 'red';
+            priceInput.style.border = 'solid 2px red';
+            return false;
+          }
+          if (!price.match(/^\d+(\.\d{1,2})?$/)) {
+            priceError.innerHTML = 'Write valid price';
+            priceError.style.color = 'red';
+            nameInput.style.border = 'solid 2px red';
+            return false;
+          }
+          priceError.innerHTML = '';
+          // nameError.innerHTML = "Valid Name";
+          priceError.style.color = 'green';
+          priceInput.style.border = 'solid 2px green';
+          return true;
+        }
+        function validateQuantity() {
+          const quantity = document.getElementById('quantity').value;
+          const quantityInput = document.getElementById('quantity');
+          console.log(name);
+          if (quantity.length == 0) {
+            quantityError.innerHTML = 'quantity field is required';
+            quantityError.style.color = 'red';
+            quantityInput.style.border = 'solid 2px red';
+            return false;
+          }
+          if (!quantity.match(/^[1-9]\d*$/)) {
+            quantityError.innerHTML = 'Write valid quantity';
+            quantityError.style.color = 'red';
+            nameInput.style.border = 'solid 2px red';
+            return false;
+          }
+          quantityError.innerHTML = '';
+          // nameError.innerHTML = "Valid Name";
+          quantityError.style.color = 'green';
+          quantityInput.style.border = 'solid 2px green';
+          return true;
+        }
+      
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          if (
+            !validatePrice() ||
+            !validateQuantity() ||
+            !validateDescription() ||
+            !validateImage() ||
+            !validateName()
+          ) {
+            // Swal.fire({
+            //   icon: 'error',
+            //   title: 'Enter details correctly!!',
+            // });
+           document.getElementById('mainerror').innerHTML="Enter details correctly!!"
+           
+            return false;
+          } else {
+            form.submit();
+          }
+        });
+      </script>
+     
+     <script>
+        
+    const fileInput = document.getElementById('formFileMultiple');
+    const selectedImages = document.getElementById('imageDiv');
+
+    fileInput.addEventListener('change', handleFileSelection);
+
+    function handleFileSelection(event) {
+      const files = event.target.files; 
+      selectedImages.innerHTML = '';
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const image = document.createElement('img')
+          image.src = e.target.result;
+          selectedImages.appendChild(image);
+        };
+
+        reader.readAsDataURL(file);
+      }
+
+      selectedImages.style.display = 'flex';
+      selectedImages.style.flexWrap = 'wrap';
+      selectedImages.style.justifyContent = 'left';
+      selectedImages.style.alignItems = 'center'
+      
+    }
+
+    </script>
+     
+</section>   

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ZenSpot</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/imgs/theme/favicon.svg">
+<!-- Template CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="stylesheet" href="/custom/custom.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<% if(prod){%>
+    <section class="mt-50 mb-50">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="table-responsive">
+
+                        <table class="table shopping-summery text-center clean">
+                            <thead>
+                                <tr class="main-heading">
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Price</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Subtotal</th>
+                                    <th scope="col">Remove</th>
+                                </tr>
+                            </thead>
+
+
+                            <% prod.cartItems.forEach((items)=>{%>
+                                <tbody>
+                                    <tr>
+                                        <td class="image product-thumbnail"><img
+                                                src="/images/products_image/<%= items.productId.productimage[0] %>" alt="#">
+                                        </td>
+                                        <td class="product-des product-name">
+                                            <h5 class="product-name"><a href="shop-product-right.html">
+                                                    <%=items.productId.productTitle %>
+                                                </a></h5>
+                                            <p class="font-xs">
+                                                <%=items.productId.productDescription %>
+                                            </p>
+                                        </td>
+                                        <td class="price" data-title="Price"><span>
+                                                <%=items.productId.productPrice %>
+                                            </span></td>
+                                        <td class="text-center" data-title="Stock">
+                                            <div class="detail-qty border radius  m-auto">
+                                                <a onclick="changequantity('<%=user._id %>','<%= items.productId._id%>','<%= items.productId.productPrice %>',-1)"
+                                                    class="qty-down"><i class="fi-rs-angle-small-down"></i></a>
+                                                <span id="<%= items.productId._id%>" class="qty-val">
+                                                    <%=items.quantity %>
+                                                </span>
+                                                <a onclick="changequantity('<%= user._id %>','<%= items.productId._id%>','<%= items.productId.productPrice %>',1)"
+                                                    class="qty-up"><i class="fi-rs-angle-small-up"></i></a>
+                                            </div>
+                                        </td>
+                                        <td class="text-right" data-title="Cart">
+                                            <span id="<%= items.productId._id %>subTotal">
+                                                <%=items.subTotal %>
+                                            </span>
+                                        </td>
+                                        <td class="action" data-title="Remove"> <a
+                                                href="/cartremove/<%= items.productId._id %>" onclick="alert('Remove Product From Cart')" class="text-muted">
+
+                                                <i class="fi-rs-trash"></i> </a> </td>
+                                    </tr>
+
+                                    <%})%>
+                                        <tr>
+                                            <td colspan="6" class="text-end">
+                                                <a href="/clearcart/<%= locals.user._id %>" onclick="alert('Remove All Products')" class="text-muted"> <i
+                                                        class="fi-rs-cross-small"></i> Clear Cart </a>
+                                            </td>
+
+                                        </tr>
+
+                                </tbody>
+
+
+
+                        </table>
+
+
+
+                    </div>
+                    <div class="cart-action text-end">
+                        <a class="btn  mr-10 mb-sm-15"><i class="fi-rs-shuffle mr-10"></i>Update Cart</a>
+                        <a class="btn "><i class="fi-rs-shopping-bag mr-10"></i>Continue Shopping</a>
+                    </div>
+                    <div class="divider center_icon mt-50 mb-50"><i class="fi-rs-fingerprint"></i></div>
+                    <div class="row mb-50">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="heading_s1 mb-3">
+                                <h4>Calculate Shipping</h4>
+                            </div>
+                            <p class="mt-15 mb-30">Flat rate: <span class="font-xl text-brand fw-900">5%</span></p>
+                            <form class="field_form shipping_calculator">
+                                <div class="form-row">
+                                    <div class="form-group col-lg-12">
+                                    </div>
+                                </div>
+                                <div class="form-row row">
+                                    <div class="form-group col-lg-6">
+                                        <input required="required" placeholder="State / Country" name="name"
+                                            type="text">
+                                    </div>
+                                    <div class="form-group col-lg-6">
+                                        <input required="required" placeholder="PostCode / ZIP" name="name" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-lg-12">
+                                        <button class="btn  btn-sm"><i class="fi-rs-shuffle mr-10"></i>Update</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="mb-30 mt-50">
+                                <div class="heading_s1 mb-3">
+                                    <h4>Apply Coupon</h4>
+                                </div>
+                                <div class="total-amount">
+                                    <div class="left">
+                                        <div class="coupon">
+                                            <form action="#" target="_blank">
+                                                <div class="form-row row justify-content-center">
+                                                    <div class="form-group col-lg-6">
+                                                        <input class="font-medium" name="Coupon"
+                                                            placeholder="Enter Your Coupon">
+                                                    </div>
+                                                    <div class="form-group col-lg-6">
+                                                        <button class="btn  btn-sm"><i
+                                                                class="fi-rs-label mr-10"></i>Apply</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="border p-md-4 p-30 border-radius cart-totals">
+                                <div class="heading_s1 mb-3">
+                                    <h4>Cart Totals</h4>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <td class="cart_total_label">Cart Subtotal</td>
+                                                <td class="cart_total_amount"><span id="" class="font-lg fw-900 text-brand">
+                                                        <%= prod.totalAmount %>
+                                                    </span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Shipping</td>
+                                                <td class="cart_total_amount"> <i class="ti-gift mr-5"></i>
+                                                    Free Shipping</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="cart_total_label">Total</td>
+                                                <td class="cart_total_amount"><strong><span id="Total"
+                                                            class="font-xl fw-900 text-brand">
+                                                            <%= prod.totalAmount %>
+                                                        </span></strong></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                                <a href="/checkout" class="btn "> <i class="fi-rs-box-alt mr-10"></i> Proceed To
+                                    CheckOut</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <%}else{%>
+        <section class="mt-50 mb-50 align-items-center">
+            <br>
+            <br>
+            <div class="container d-flex justify-content-center">
+                <h3 style="color: brown; font-size: xx-large;"> ! Cart Is Empty</h3>
+            </div>
+            <div class="container">
+                <br>
+                <br>
+            </div>
+
+            <div class="container d-flex align-items-center justify-content-center"><a href="/shop"><button
+                        class="btn ">Back to
+                        shop</button></a></div>
+        </section>
+
+        <%}%>
+            <script>
+
+                function changequantity(cartId, productId,price,qntcount) {
+                    qntcount = parseInt(qntcount)
+                   
+                    let quantity = parseInt(document.getElementById(productId).innerHTML)
+                    let Total=parseInt(document.getElementById('Total').innerHTML)
+                    $.ajax({
+                        url: '/product-quantity-change',
+                        data: {
+                            cart: cartId,
+                            product: productId,
+                            qntcount: qntcount,
+                            quantity: quantity
+                        },
+                        method: 'post',
+                        success: (response) => {
+                            console.log(response)
+                            if (response.status) {
+                                let newquantity=quantity+qntcount
+                                price=parseInt(price)
+                                 document.getElementById(productId).innerHTML= newquantity
+                                 const spanelement = $(`#${productId}subTotal`)
+                                 spanelement.html(newquantity*price)
+
+                                 document.getElementById('Total').innerHTML=Total+(qntcount*price)
+
+                            }else if(response.removeProd){
+                                toastr.warning('item removed from cart')
+                                
+                            }
+                        }
+                    })
+                    toastr.options = {
+                        "preventDuplicates": true,
+                        positionClass: 'toast-top-right',
+                        timeOut: '3000',
+                        extendedTimeOut: '1000',
+        backgroundColor: "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)",
+
+                        onclick: function () {
+                            location.reload();
+                        },
+                        onHidden: function () {
+                            location.reload();
+                        },
+                        onShown: function () {
+                            var btn = $('<button/>', {
+                                text: 'OK',
+                                class: 'btn btn-sm btn-primary',
+                                click: function () {
+                                    location.reload();
+                                }
+                            });
+                            $('.toast:last').append(btn);
+                        }
+                    }
+                }
+
+            </script>
+

@@ -1,0 +1,19 @@
+<section class="content-main mt-80 mb-80">
+    <div class="card mx-auto card-login">
+        <div class="card-body">
+            <h4 class="card-title mb-4">Edit Category</h4>
+            <form action="/admin/editcategory" method="post">
+                <div class="mb-3">
+                    <input class="form-control"  name="categoryname" value="<%= category.name %>" type="text">
+                    
+                </div>
+               
+                <input class="form-control"  name="hiddenname" value="<%= category.name %>" type="text" hidden>
+
+                <div class="mb-4">
+                    <button type="submit" class="btn btn-primary w-100"> Edit Category </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

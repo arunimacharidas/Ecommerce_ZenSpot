@@ -1,0 +1,154 @@
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Categories </h2>
+            <p>Add, edit or delete a category</p>
+        </div>
+        <!-- <div>
+            <input type="text" placeholder="Search Categories" class="form-control bg-white">
+        </div> -->
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form id="category_form">
+                        <div class="mb-4">
+                            <label for="product_name" class="form-label">Category</label>
+                            <input type="text" placeholder="Enter new Category" class="form-control" id="product_name"
+                                name="category" />
+                        </div>
+                        <!-- <div class="mb-4">
+                            <label for="product_slug" class="form-label">Slug</label>
+                            <input type="text" placeholder="Type here" class="form-control" id="product_slug" />
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Parent</label>
+                            <select class="form-select">
+                                <option>Clothes</option>
+                                <option>T-Shirts</option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Description</label>
+                            <textarea placeholder="Type here" class="form-control"></textarea>
+                        </div> -->
+                        <div class="d-grid">
+                            <button class="btn btn-primary">Create category</button>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="myTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <!-- <th>Slug</th> -->
+                                    <th>Products Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="category">
+                                <% allCategories.forEach((category,index)=>{%>
+
+
+                                    <tr>
+                                        <td>
+                                            <%=index+1%>
+                                        </td>
+                                        <td><b>
+                                                <%=category.name%>
+                                            </b></td>
+                                            <td><%=category.status%></td>
+                                            <td class="text-end">
+                                        
+                                                <a href="/admin/editcategory/<%= category._id %>"
+                                                    class="btn btn-sm btn-success rounded font-sm">Edit</a>
+                                                    <% if(category.status){%> 
+                                                    <a href="/admin/blockcategory/<%= category._id %>"
+                                                        class="btn btn-sm btn-danger rounded font-sm">BLOCK</a>
+                                                        <% }else{%>
+                                                            <a href="/admin/blockcategory/<%= category._id %>"
+                                                                class="btn btn-sm btn-success rounded font-sm">UN BLOCK</a>
+                                                        <%}%>
+                                            </div>
+                                        </div> <!-- dropdown //end -->
+                                    </td>
+                                    </tr>
+
+                                    <%})%>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section>
+
+
+
+<script src="/toaster/beautyToast.js"></script>
+<script src="/toaster/beautyToast.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search)
+    const message = urlParams.get('message')
+    if(message){
+        if(message.startsWith('Success Add Category')){
+            beautyToast.success({
+                                title: 'Success', // Set the title of beautyToast
+                                message: 'Success Add Category', // Set the message of beautyToast
+                            });
+        }else if(message.startsWith('already declate category')){
+            beautyToast.warning({
+                                title: 'warnig', // Set the title of beautyToast
+                                message: 'already declare category' // Set the message of beautyToast
+                            });
+        }
+    }
+    $(document).ready(function () {
+        $('#category_form').submit(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+
+
+            let categoryName = document.getElementById('product_name').value
+            if (categoryName) {
+                $.ajax({
+                    url: '/admin/addcategory',
+                    method: 'POST',
+                    data: { category: categoryName },
+                    success: function (response) {
+                        console.log(response)
+                        console.log("response");
+                        if (response.status) {
+                            location.href='/admin/addcategory?message=Success Add Category'
+                        }
+                        else {
+                           
+                            location.href='/admin/addcategory?message=already declate category'
+                        }
+
+
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+
+                beautyToast.info({
+                    title: 'info', // Set the title of beautyToast
+                    message: 'please add category' // Set the message of beautyToast
+                });
+
+            }
+
+        });
+    });
+</script>

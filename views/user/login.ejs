@@ -1,0 +1,155 @@
+
+    <div class="page-header breadcrumb-wrap">
+        <div class="container">
+            <div class="breadcrumb">
+                <a href="/" rel="nofollow">Home</a>
+                <span></span> Login / Register
+            </div>
+        </div>
+    </div>
+
+  <section class="pt-150 pb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 m-auto">
+                <div class="row">
+                    <div class="col-lg-5 m-auto">
+                        <div class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                            <div class="padding_eight_all bg-white">
+                                <div class="heading_s1">
+                                    <h3 class="mb-30">Login</h3>
+                                </div>
+                                <form method="post" action="/login" onsubmit="return validateSubmit()">
+                                    <div class="form-group">
+                                        <input type="text" required="" name="Email" id="Email" placeholder="Your Email" onkeyup="clearEmailError()">
+                                        <span id="EmailErr" style="color: red; font-size: medium; margin-top: 5px;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input required="" type="Password" id="Password" name="Password" placeholder="Password" onkeyup="clearPassError()">
+                                        <span id="PasswordErr" style="color: red; font-size: medium; margin-top: 5px;"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <style>
+                                            .btn-fill-out {
+                                                width: 100%;
+                                                text-align: center;
+                                            }
+                                            
+                                            .btn-block {
+                                                display: block;
+                                                width: 100%;
+                                            }
+                                            
+                                            .btn-sm {
+                                                padding: 8px 12px;
+                                                font-size: 14px;
+                                            }
+                                            
+                                            .hover-up:hover {
+                                                transform: translateY(-2px);
+                                            }
+                                            
+                                            .signup-login-buttons {
+                                                display: flex;
+                                                justify-content: space-between;
+                                                align-items: center;
+                                            }
+                                            
+                                            .signup-login-buttons .btn-block {
+                                                margin-right: 5px;
+                                            }
+                                        </style>
+                                        
+                                        <div class="signup-login-buttons">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up">Log in</button>
+                                            <button onclick="signup()" class="btn btn-fill-out  hover-up">Signup
+                                            
+                                            </button>  
+                                        </div>
+                                    </div>         
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between;">
+                                        <div>
+                                            <a class="text-muted" href="/forgotphone">FORGOTTEN PASSWORD</a>
+                                        </div>
+                                        <div>
+                                            <a class="text-muted" href="/otpphone">OTP LOGIN</a>
+                                        </div>
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<script>
+    function signup(){
+        window.location.href='/signup'
+    }
+</script>
+
+<script>
+    function clearEmailError() {
+        document.getElementById('submitErr').innerHTML =''
+        $('#EmailErr').css('display', 'none');
+    }
+
+    function clearPassError() {
+        document.getElementById('submitErr').innerHTML =''
+        $('#PasswordErr').css('display', 'none');
+    }
+
+    function validateEmail() {
+        const Email = document.getElementById('Email').value;
+        const regEmail = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/
+        if (!regEmail.test(Email)) {
+            $('#EmailErr').css('display', '');
+            document.getElementById('EmailErr').innerHTML = "Please enter correct email";
+            return false;
+        } else {
+            $('#EmailErr').css('display', '');
+            document.getElementById('Emailerr').innerHTML = "";
+            return true;
+        }
+    }
+
+    function validatePassword() {
+        const Password = document.getElementById('Password').value;
+        const regPassword =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;
+        if (!regPassword.test(Password)) {
+            console.log("inside error");
+            $('#PasswordErr').css('display', '');
+            document.getElementById('PasswordErr').innerHTML = "please Enter Password"
+            return false;
+        } else {
+            console.log("pass test pass");
+            $('#PasswordErr').css('display', '');
+            document.getElementById('PasswordErr').innerHTML = ''
+            return true;
+        }
+
+    }
+
+    function validateSubmit() {
+        if (!validatePassword() || !validateEmail() ) {
+            document.getElementById('submitErr').innerHTML = 'Error submitting Fill All Fields';
+            return false
+        } else {
+            document.getElementById('login').submit()
+            return true
+        }
+    }
+</script>
+
+
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-login-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:26:06 GMT

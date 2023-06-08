@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
+</head>
+<body>
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">ALL Users </h2>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover" id="myTable">
+                    <thead>
+                        <tr>
+                            <th>#ID</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Phone</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% Allusers.forEach((user, index) => { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><b><%= user.name %></b></td>
+                                <td><%= user.email %></td>
+                                <td><%= user.phone %></td>
+                                <td>
+                                    <% if (user.status) { %>
+                                        <span class="badge rounded-pill alert-success">ACTIVE</span>
+                                    <% } else { %>
+                                        <span class="badge rounded-pill alert-danger">BLOCKED</span>
+                                    <% } %>
+                                </td>
+                                <td>
+                                    <% if (user.status) { %>
+                                        <a href="/admin/allusers/<%= user._id %>" class="btn btn-sm btn-danger rounded font-sm block-btn w-100" onclick="blockUser('<%= user._id %>'); return false;">BLOCK</a>
+                                    <% } else { %>
+                                        <a href="/admin/allusers/<%= user._id %>" class="btn btn-sm btn-success rounded font-sm unblock-btn w-100" onclick="unblockUser('<%= user._id %>'); return false;">UNBLOCK</a>
+                                    <% } %>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div> <!-- table-responsive //end -->
+        </div> <!-- card-body end// -->
+    </div> <!-- card end// -->
+
+    <div class="pagination-area mt-15 mb-50">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-start">
+                <li></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.all.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
+        });
+
+        function blockUser(userId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This user will be blocked!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, block it!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    // Submit the form to block the user
+                    window.location.href = "/admin/allusers/" + userId;
+                }
+            });
+        }
+
+        function unblockUser(userId) {
+            Swal.fire({
+                title: "Are you sure?",
+                text: "This user will be unblocked!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Yes, unblock it!",
+                cancelButtonText: "Cancel",
+                reverseButtons: true
+            }).then(function(result) {
+                if (result.isConfirmed) {
+                    // Submit the form to unblock the user
+                    window.location.href = "/admin/allusers/" + userId;
+                }
+            });
+        }
+    </script>
+</body>
+</html>
+
+

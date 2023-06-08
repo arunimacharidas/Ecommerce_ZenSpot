@@ -1,0 +1,104 @@
+<main>
+    <section class="pt-150 pb-150">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 m-auto">
+                    <div class="row">
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-6 justify-content-center d-">
+                            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+                                <div class="padding_eight_all bg-white">
+                                    <div class="heading_s1">
+                                        <h3 class="mb-30">Change Password</h3>
+                                    </div>
+                                    <form method="post" id="changepass" action="/changepass" onsubmit="return validateSubmit()">
+                                        <div class="form-group">
+                                            <input required="" type="password" id="Password" name="password"
+                                                placeholder="Password" onkeyup="return validatePassword()">
+                                            <span id="PasswordErr"
+                                                style="color: red; font-size: medium; margin-top: 5px;"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="password" id="ConfirmPass" name="confirm Password"
+                                                placeholder="Confirm password" onkeyup="return confirmPassword()">
+                                            <span id="ConfirmErr"
+                                                style="color: red; font-size: medium;  margin-top: 5px;"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input required="" type="text" id="MobileNumber" name="Number"
+                                                value="<%= locals.number %>" hidden>
+                                        </div>
+    
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                                name="signup" >Change Password</button>
+                                            <span id="submitErr"
+                                                style="color: red; font-size: medium; margin-top: 5px;"></span>
+                                        </div>
+                                    </form>
+    
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    </main>
+    
+    <!-- Preloader Start -->
+    <!-- <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <!-- Vendor JS -->
+    
+    </body>
+    
+    
+    
+    <script>
+        function validatePassword() {
+            const Password = document.getElementById('Password').value;
+            const regPass =/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/;;
+            if (!regPass.test(Password)) {
+                document.getElementById('PasswordErr').innerHTML = 'Invalid Password Please Ender Valid password';
+                return false;
+            } else {
+                document.getElementById('PasswordErr').innerHTML = "";
+                return true;
+            }
+        }
+        function confirmPassword() {
+            const password = document.getElementById('Password').value;
+            const Confirm = document.getElementById('ConfirmPass').value;
+            if (password !== Confirm) {
+                document.getElementById('ConfirmErr').innerHTML = 'Ender Correct Password';
+                return false;
+            } else {
+                document.getElementById('ConfirmErr').innerHTML = "";
+                return true;
+            }
+        }
+    
+        function validateSubmit() {
+            if (!confirmPassword() || !validatePassword() ) {
+                document.getElementById('submitErr').innerHTML = 'Error Submiting Fill All Fields'
+                return false
+            } else {
+                document.getElementById('signin').submit()
+            }
+        }
+    </script>

@@ -1,0 +1,195 @@
+<section class="pt-150 pb-150">
+  <div class="container">
+    <div class="d-flex justify-content-end mb-10">
+      <a href="/changepass">
+        <button class="btn btn-primary btn-md rounded-pill">Change Password</button>
+      </a>
+    </div>
+    
+    <div class="d-flex justify-content-end mb-10">
+      <a href="">
+        <button class="btn btn-danger btn-md rounded-pill">Delete Address</button>
+      </a>
+    </div>
+    
+    <div class="d-flex justify-content-end mb-50">
+      <a href="/addaddress">
+        <button class="btn btn-md rounded-pill">Add Address</button>
+      </a>
+    </div>
+  
+    <div class="row">
+      <!-- Your content here -->
+    </div>
+  </div>
+  
+  
+  
+  
+        <div class="card">
+          <div class="card-header">
+            <h5 class="mb-0">Your Orders</h5>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table" id="myTable">
+                <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>Date</th>
+                    <th>Address</th>
+                    <th>Pincode</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                    <th>Action</th>
+  
+                  </tr>
+                </thead>
+                <% orders.reverse().forEach((order,index)=>{%>
+                <tbody>
+                    <td>
+                      <%= index+1 %>
+                    </td>
+                    <td>
+                      <%= order.date.toLocaleDateString()%>
+                    </td>
+                    <td>
+                      <%= order.billing_address%>
+                    </td>
+                    <td>
+                      <%= order.zipcode%>
+                    </td>
+  
+                    <td>
+                      <%= order.totalAmount %>
+                    </td>
+                    <td>
+                      <%= order.payment_option%>
+                    </td>
+                    <td>
+                      <span id="<%=order._id%>status">
+                        <%= order.status%>
+                      </span>
+                    </td>
+                    <td>
+                      <a href="/singleorder/<%= order._id %>" class="btn btn-md rounded font-sm">Detail</a>
+                    </td>
+                    <td>
+                      <% if (order.status==='Cancelled' || order.status==='Returned' ) { %>
+                        <button class="btn btn-sm btn-secondary  dropdown-toggle" id="statusDrop<%= order._id %>"
+                          type="button" data-bs-toggle="dropdown" aria-expanded="false" disabled>
+                          Order Status
+                        </button>
+                        <% } else { %>
+                          <button class="btn btn-sm btn-secondary dropdown-toggle" id="statusDrop<%= order._id %>"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Order Status
+                          </button>
+                          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton" id="<%= order._id %>">
+                            <% if(order.status !='Delivered' ) { %>
+                              <li><a class="dropdown-item" id="<%= order._id %>cancelledStatus" href="#"
+                                  onclick="changeOrderStatus('<%= order._id %>', 'Cancelled', '<%= order.userId._id %>')">
+                                  Cancel
+                                </a></li>
+                              <% }else if(order.status='Delivered' ){%>
+                                <li><a class="dropdown-item" id="<%= order._id %>returnedStatus" href="#"
+                                    onclick="changeOrderStatus('<%= order._id %>', 'Returned', '<%= order.userId._id %>')">
+                                    Return
+                                  </a></li>
+                                <%} %>
+                          </ul>
+                          <% } %>
+                    </td>
+                  </tbody>
+                  <%})%>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  </section>
+  </main>
+  
+  <!-- Preloader Start -->
+  <!-- <div id="preloader-active">
+    <div class="preloader d-flex align-items-center justify-content-center">
+      <div class="preloader-inner position-relative">
+        <div class="text-center">
+          <h5 class="mb-5">Now Loading</h5>
+          <div class="loader">
+            <div class="bar bar1"></div>
+            <div class="bar bar2"></div>
+            <div class="bar bar3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+  <!-- Vendor JS-->
+  
+  
+  
+  <script>
+    $(document).ready(function () {
+        $('#myTable').DataTable();
+    });
+  
+  </script>
+  
+  <script>
+  
+  
+    function changeOrderStatus(orderId, status, userId) {
+      console.log(userId);
+      $.ajax({
+        url: '/changeOrderStatus',
+        method: 'POST',
+        data: {
+          orderId: orderId,
+          status: status,
+          id: userId
+        },
+        success: function (response) {
+          if (status === 'Returned' || status === 'Cancelled') {
+            $(`#statusDrop${orderId}`).prop('disabled', true)
+          } else if (status === 'Delivered') {
+            $(`#${orderId}cancelledStatus`).hide()
+          }
+          $(`#${orderId}status`).innerhtml(status)
+        }
+      });
+    }
+  
+  </script>
+  <script>
+
+
+    function changeOrderStatus(orderId, status, userId) {
+      console.log(userId);
+      $.ajax({
+        url: '/changeOrderStatus',
+        method: 'POST',
+        data: {
+          orderId: orderId,
+          status: status,
+          id: userId
+        },
+        success: function (response) {
+          if (status === 'Returned' || status === 'Cancelled') {
+            $(`#statusDrop${orderId}`).prop('disabled', true)
+          } else if (status === 'Delivered') {
+            $(`#${orderId}cancelledStatus`).hide()
+          }
+          $(`#${orderId}status`).innerhtml(status)
+        }
+      });
+    }
+  
+  </script>
+  </body>
+  
+  </html>

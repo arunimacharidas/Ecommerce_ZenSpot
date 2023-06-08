@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Evara - eCommerce HTML Template</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="">
+        <meta property="og:type" content="">
+        <meta property="og:url" content="">
+        <meta property="og:image" content="">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+        <!-- Template CSS -->
+        <link rel="stylesheet" href="assets/css/main.css">
+    </head>
+<body>
+<section class="pt-150 pb-150">
+<div class="container">
+        <div class="row">
+            <div class="col-md-4 m-auto">
+                <div class="row">
+                    <div class="col-lg-1"></div>
+                    <form action="/forgottenpassword" method="post">
+                                    <div class="form-group">
+                                        <input required="" type="text" id="otpInput otp" name="otp"
+                                            placeholder="otp" onkeyup="return validateOTP()">
+                                            <style>
+                                                .resend-button {
+                                                  float: right;
+                                                  background-color: #206481;
+                                                  color: white;
+                                                  padding: 10px 20px;
+                                                  border: none;
+                                                  border-radius: 4px;
+                                                  cursor: pointer;
+                                                }
+                                              
+                                                .resend-button:hover {
+                                                  background-color: #6762b7;
+                                                }
+                                              </style>
+                                              
+                                              <span id="timerCount"></span>
+                                              <button class="resend-button" onclick="resend()"> Resend</button>
+                                              
+
+                                            <% if(locals.Err){%>
+                                            
+                                        <span id="otpErr"
+                                            style="color: red; font-size: medium; margin-top: 5px;"><%=Err%></span>
+                                            <%}%>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-fill-out btn-block hover-up"
+                                            name="signup" >Login</button>
+                                            <span id="submitErr"
+                                            style="color: red; font-size: medium; margin-top: 5px;"></span>  
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+<!-- Preloader Start -->
+
+<!-- Vendor JS-->
+
+</body>
+
+<script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+<script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+<script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+<script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+<script src="assets/js/plugins/slick.js"></script>
+<script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+<script src="assets/js/plugins/wow.js"></script>
+<script src="assets/js/plugins/jquery-ui.js"></script>
+<script src="assets/js/plugins/perfect-scrollbar.js"></script>
+<script src="assets/js/plugins/magnific-popup.js"></script>
+<script src="assets/js/plugins/select2.min.js"></script>
+<script src="assets/js/plugins/waypoints.js"></script>
+<script src="assets/js/plugins/counterup.js"></script>
+<script src="assets/js/plugins/jquery.countdown.min.js"></script>
+<script src="assets/js/plugins/images-loaded.js"></script>
+<script src="assets/js/plugins/isotope.js"></script>
+<script src="assets/js/plugins/scrollup.js"></script>
+<script src="assets/js/plugins/jquery.vticker-min.js"></script>
+<script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<!-- Template  JS -->
+<script src="assets/js/main.js"></script>
+<script>
+
+function validateOTP() {
+  const otp = document.getElementById('otp').value;
+  const regex = /^[0-9]{6}$/;
+  if (!regex.test(otp)) {
+    document.getElementById('otpErr').innerHTML = 'Invalid OTP';
+    return false;
+  } else {
+    document.getElementById('otpErr').innerHTML = '';
+    return true;
+  }
+}
+
+function validateSubmit() { 
+    const otpValid = validateOTP();
+    if ( !otpValid) {
+        document.getElementById('submitErr').innerHTML = 'Error submitting. Please fill all fields correctly.';
+        return false;
+    } else {
+        document.getElementById().submit();
+        return true;
+    }
+}
+
+</script>
+
+<script>
+   window.onload = function() {
+      startTimer();
+    };
+
+    let timer;
+    let duration = 10; // Duration in seconds
+    function resend(){
+   
+      $.ajax({
+            method:'post',
+            url:'/resendOtp',
+            success:(Response=>{
+              startTimer()
+            })
+        })
+    }
+
+    function startTimer() {
+        
+      // Disable the start button
+      const button = document.querySelector('button');
+      button.disabled = true;
+
+      // Clear any existing timer
+      clearTimeout(timer);
+
+      // Get the timer count span element
+      const timerCountSpan = document.getElementById('timerCount');
+
+      // Start the timer
+      let seconds = duration;
+      timer = setInterval(function() {
+        // Update the timer count span
+        timerCountSpan.textContent = `OTP resend timer: ${seconds}s`;
+
+        if (seconds <= 0) {
+          // Enable the start button and reset the timer count span
+          button.disabled = false;
+          timerCountSpan.textContent = '';
+
+          // Clear the timer
+          clearTimeout(timer);
+        }
+
+        seconds--;
+      }, 1000);
+    }
+  </script>
+</html>

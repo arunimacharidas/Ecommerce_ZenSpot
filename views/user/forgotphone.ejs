@@ -1,0 +1,83 @@
+<div class="page-header breadcrumb-wrap">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="/" rel="nofollow">Home</a>
+            <span></span> <a href="/login">Login</a>
+            <span></span> Forgot Password
+        </div>
+    </div>
+</div>
+<section class="pt-150 pb-150">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 m-auto">
+                <div class="row">
+                    <div class="col-lg-5 m-auto">
+                        <div
+                            class="login_wrap widget-taber-content p-30 background-white border-radius-10 mb-md-5 mb-lg-0 mb-sm-5">
+                            <div class="padding_eight_all bg-white">
+                                <div class="heading_s1">
+                                    <h3 class="mb-30">PleaseEnterNumber</h3>
+                                </div>
+                                <form method="post" action="/forgotphone" onsubmit="return validateSubmit()">
+                                    <div class="form-group">
+                                        <input required="" type="text" id="MobileNumber" name="Number"
+                                            placeholder="Number" onkeyup="validateMobileNumber()">
+                                        <span id="NumberErr"
+                                            style="color: red; font-size: medium; margin-top: 5px;"></span>
+                                    </div>
+                                    <div>
+                                        <div>
+                                            <div>
+                                                <button class="btn btn-sm btn-fill-out btn-block hover-up"
+                                                    type="submit"><a style="color: white;"> signup </a> </button>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</main>
+
+
+
+
+
+
+    <script>
+
+        function validateMobileNumber() {
+            const Num = document.getElementById('MobileNumber').value;
+            const regNum = /^(\+?\d{1,3}[- ]?)?\d{10}$/
+            if (!regNum.test(Num)) {
+                document.getElementById('NumberErr').innerHTML = 'Invalid Number Please Valid Number';
+                return false;
+            } else if (Num.length == 10) {
+                document.getElementById('NumberErr').innerHTML = '';
+                return true;
+            } else {
+                document.getElementById('NumberErr').innerHTML = 'Invalid Number Please Valid Number';
+                return false;
+            }
+        }
+
+        function validateSubmit() {
+            if (!validateMobileNumber()) {
+                document.getElementById('submitErr').innerHTML = 'Error Submiting Fill All Fields'
+                return false
+            } else {
+                document.getElementById('otpphone').submit()
+                return true
+            }
+        }
+    </script>
